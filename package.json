@@ -1,0 +1,26 @@
+{
+  "name": "adb-project",
+  "version": "1.0.0",
+  "description": "Library System",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VISHNUMOHANS-FULLSTACKWEBDEVELOPER/ADB-Project.git"
+  },
+  "author": "Vishnu Mohan S",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VISHNUMOHANS-FULLSTACKWEBDEVELOPER/ADB-Project/issues"
+  },
+  "homepage": "https://github.com/VISHNUMOHANS-FULLSTACKWEBDEVELOPER/ADB-Project#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "express": "^4.21.0"
+  }
+}
