@@ -1,8 +1,7 @@
-const express=require("express");
+const express = require("express");
 const users = require("../data/users.json");
 
-const router=express.Router();
-
+const router = express.Router();
 
 router.get("/", (req, res) => {
   res.status(200).json({ sucess: true, data: users });
@@ -69,55 +68,64 @@ router.get("/subscription-details/:id", (req, res) => {
   const user = users.find((each) => each.id === id);
   if (!user) {
     return res.status(404).json({
-      sucess: false,
-      message: "User doesnot exist",
+      success: false,
+      message: "User does not exist",
     });
   }
-  const getDateInDays = (data = "") => {
+
+  const getDateInDays = (data) => {
     let date;
-    if (data === "") {
-      data = new Date();
+    if (!data) {
+      date = new Date();
     } else {
       date = new Date(data);
     }
-    let days = Math.floor(date/ (1000 * 60 * 60 * 24));
-    return days;
+    const today = new Date();
+    const diffTime = Math.abs(date - today);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   };
-  const subscriptionType = (date) => {
-    if ((user.subscriptionType == "Basic")) {
-      date =  date + 90;
-    } else if ((user.subscriptionType == "Standard")) {
-      date =  date + 180;
-    } else if ((user.subscriptionType == "Premium")) {
-      date =  date + 365;
+
+  const subscriptionTypeExpiration = (type, date) => {
+    let expirationDate = new Date(date);
+    if (type === "Basic") {
+      expirationDate.setDate(expirationDate.getDate() + 90);
+    } else if (type === "Standard") {
+      expirationDate.setDate(expirationDate.getDate() + 180);
+    } else if (type === "Premium") {
+      expirationDate.setDate(expirationDate.getDate() + 365);
     }
-    return date;
+    return expirationDate;
   };
-  let returnDate = getDateInDays(user.returnDate);
-  let currentDate = getDateInDays(date);
-  let subscriptionDate = getDateInDays(user.subscriptionDate);
-  let subscriptionExpiration = subscriptionType(user.subscriptionDate);
-  
 
+  const currentDate = new Date();
+  const subscriptionDate = new Date(user.subscriptionDate);
+  const returnDate = new Date(user.returnDate);
 
-  const dt = {
+  const daysLeftForExpiration = Math.ceil(
+    (subscriptionTypeExpiration(user.subscriptionType, subscriptionDate) -
+      currentDate) /
+      (1000 * 60 * 60 * 24)
+  );
+  const isSubscriptionExpired =
+    currentDate >
+    subscriptionTypeExpiration(user.subscriptionType, subscriptionDate);
+  const fine =
+    returnDate < currentDate ? (isSubscriptionExpired ? 100 : 50) : 0;
+
+  const subscriptionDetails = {
     ...user,
     daysLeftForExpiration:
-      subscriptionExpiration <= currentDate
-        ? 0
-        : subscriptionExpiration - currentDate,
-    isSubscriptionExpired: subscriptionExpiration <= currentDate,
-    fine:
-      returnDate < currentDate
-        ? subscriptionExpiration <= currentDate
-          ? 100
-          : 50
-        : 0,
+      daysLeftForExpiration > 0 ? daysLeftForExpiration : 0,
+    isSubscriptionExpired,
+    fine,
   };
+
   return res.status(200).json({
-    sucess: true,
-    message: "Subscription details of the user is",
-    data:dt,
+    success: true,
+    message: "Subscription details of the user",
+    data: subscriptionDetails,
   });
 });
-module.exports= router;
+
+module.exports = router;
