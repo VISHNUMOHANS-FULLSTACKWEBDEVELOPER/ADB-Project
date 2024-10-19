@@ -1,9 +1,20 @@
 const express=require("express");
+const dotenv=require("dotenv");
+
+const DbConnection=require("./databaseConnecion");
 
 const userRouter=require("./routes/users")
 const booksRouter = require("./routes/books");
-const app=express();
-const PORT=8081;
+
+
+
+dotenv.config();
+
+const app = express();
+
+DbConnection();
+
+const PORT = 8081;
 app.use(express.json());
 app.get("/",(req,res)=>{
     res.status(200).json({message:"Server is up and running:-"})

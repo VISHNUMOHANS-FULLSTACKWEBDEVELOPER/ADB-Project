@@ -32,3 +32,6 @@ GET:Get all issued books
 
 /books/issued/withfine
 GET:Get all issued books with their fine
+
+Mongo DB
+Its a non relational DB(Non sequential query language).Data is stored in json format.
