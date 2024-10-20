@@ -19,19 +19,24 @@ exports.getSingleBookById = async(req,res) => {
        .status(200)
       .json({ sucess: true, message: "Book Found", data: book });
 };
-exports.getAllIssuedBooks=async(req,res)=>{
-    const users=await UserModel.find({issuedBook:{$exists:true},}).populate("issuedBook");
+exports.getAllIssuedBooks = async (req, res) => {
+  const users = await UserModel.find({
+    issuedBook: { $exists: true },
+  }).populate("issuedBook");
 
-    const issuedBook=users.map((each)=>new IssuedBook(each));
-    if (issuedBook.length === 0) {
-      return res.status(404).json({ sucess: false, message: "No Book Issued" });
-    }
-    return res.status(200).json({
-      sucess: true,
-      message: "Users with Book Issued",
-      data: issuedBook,
-    });
-}
+  console.log("Users with issued books:", users); // Log users to check their structure
+
+  const issuedBooks = users.map((each) => new IssuedBook(each));
+  if (issuedBooks.length === 0) {
+    return res.status(404).json({ sucess: false, message: "No Book Issued" });
+  }
+  return res.status(200).json({
+    sucess: true,
+    message: "Users with Book Issued",
+    data: issuedBooks,
+  });
+};
+
 exports.addNewBook=async(req,res)=>{
   const {data}= req.body;
  

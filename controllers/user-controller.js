@@ -4,21 +4,23 @@ const { UserModel, BookModel } = require("../models/index");
 exports.getAllUsers=async(req,res)=>{
     const users=await UserModel.find();
     if(users.length===0){
-     res.status(404).json({ sucess: false, message:"No Users Found"});
+     return res
+       .status(404)
+       .json({ sucess: false, message: "No Users Found"});
     }
-    res
+    return res
       .status(200)
-      .json({ sucess: true, message: "Users Found", data: users });
+      .json({ sucess: true, message: "Users Found", data:users});
 };
 exports.getSingleUserById=async(req,res)=>{
   const { id } = req.params;
-  const user = await UserModel.findById();
-  if (!user) {
-    res.status(404).json({ sucess: false, message: "User doesnot exist" });
+  const users = await UserModel.findById(id);
+  if (!users) {
+    return res.status(404).json({ sucess: false, message: "User doesnot exist" });
   }
-  return res
+   res
     .status(200)
-    .json({ sucess: true, message: "User Found", data: user });
+    .json({ sucess: true, message: "User Found", data: users });
 };
 exports.deleteUser=async(req,res)=>{
   const { id } = req.params;
@@ -31,7 +33,7 @@ exports.deleteUser=async(req,res)=>{
   }
   return res
     .status(200)
-    .json({ sucess: true, message: "Deleted User", data: users });
+    .json({ sucess: true, message: "Deleted User", data: user });
 };
 exports.updateUserData=async(req,res)=>{
 
