@@ -13,7 +13,7 @@ npm i dotenv
 # Book by id
 # eg:http://localhost:8081/books/6714e8397eada6896bf8d2f1
 # User by id
-# eg:http://localhost:8081/users/6714e7e47eada6896bf75beb
+# eg:http://localhost:8081/users/676a50f85a553c4fdfb7470e
 
 # Delete user by id
 # eg:http://localhost:8081/users/6714e7e47eada6896bf75beb
